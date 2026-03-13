@@ -29,7 +29,7 @@
 
 1.  克隆本仓库：
     ```bash
-    git clone https://github.com/your-username/github-copilot-workshop-2026.git
+    git clone https://github.com/gaoshanj/github-copilot-workshop-2026.git
     cd github-copilot-workshop-2026
     ```
 

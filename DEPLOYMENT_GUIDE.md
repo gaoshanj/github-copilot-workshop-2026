@@ -27,8 +27,8 @@ git commit -m "Initial commit: Workshop structure and content"
 Copy the commands from the "…or push an existing repository from the command line" section, or use these:
 
 ```bash
-# Replace YOUR_USERNAME with your actual GitHub username
-git remote add origin https://github.com/YOUR_USERNAME/github-copilot-workshop-2026.git
+# Replace gaoshanj with your actual GitHub username
+git remote add origin https://github.com/gaoshanj/github-copilot-workshop-2026.git
 git branch -M main
 git push -u origin main
 ```
@@ -36,7 +36,7 @@ git push -u origin main
 ## 4. Sharing with Students
 
 ### Option A: Public Repository
--   Simply share the URL: `https://github.com/YOUR_USERNAME/github-copilot-workshop-2026`
+-   Simply share the URL: `https://github.com/gaoshanj/github-copilot-workshop-2026`
 -   Students can `git clone` without needing an account.
 
 ### Option B: Private Repository
