@@ -1,0 +1,17 @@
+# Add these to your shell configuration file (.bashrc, .zshrc, or config.fish)
+
+# Official alias for 'gh copilot suggest'
+alias ??='gh copilot suggest -t shell'
+
+# Official alias for 'gh copilot explain'
+alias wtf='gh copilot explain'
+
+# Git specific helper
+alias git?='gh copilot suggest -t git'
+
+# GitHub CLI helper
+alias gh?='gh copilot suggest -t gh'
+
+# PowerShell (profile.ps1)
+# function ?? { gh copilot suggest -t shell $args }
+# function wtf { gh copilot explain $args }

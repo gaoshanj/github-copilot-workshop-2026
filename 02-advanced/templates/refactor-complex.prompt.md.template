@@ -1,0 +1,28 @@
+---
+name: Complex Refactoring
+description: A template for planning and executing complex refactorings
+---
+
+# Context
+We need to refactor the legacy module located at `[FILE_PATH]` to improve maintainability and performance.
+
+# Current Issues
+1.  [ISSUE_1, e.g., High cyclomatic complexity in main function]
+2.  [ISSUE_2, e.g., Hardcoded configuration values]
+3.  [ISSUE_3, e.g., Lack of error handling]
+
+# Goals
+-   [GOAL_1, e.g., Extract business logic into separate service classes]
+-   [GOAL_2, e.g., Implement dependency injection]
+-   [GOAL_3, e.g., Add comprehensive unit tests]
+
+# Constraints
+-   Must maintain backward compatibility with existing API.
+-   Do not change the database schema.
+-   Use [SPECIFIC_LIBRARY] for logging.
+
+# Plan
+1.  Analyze the current dependency graph.
+2.  Create interface definitions for the new components.
+3.  Incrementally migrate logic, verifying with tests at each step.
+4.  Update documentation.

@@ -1,0 +1,14 @@
+{
+  "name": "unit-test-generator",
+  "version": "1.0.0",
+  "description": "Automatically generates unit tests for a given file content.",
+  "publisher": "workshop-demo",
+  "commands": [
+    {
+      "name": "generate",
+      "description": "Generate tests",
+      "executable": "node",
+      "arguments": ["index.js"]
+    }
+  ]
+}
