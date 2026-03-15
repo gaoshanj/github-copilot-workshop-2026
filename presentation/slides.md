@@ -1,508 +1,453 @@
 ---
 marp: true
 theme: gaia
-paginate: true
+class: lead
 backgroundColor: #0d1117
 color: #c9d1d9
 style: |
-  section {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 28px;
-    padding: 40px;
-    background-image: none;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    color: #ffffff;
-    margin-bottom: 0.5em;
-  }
-  h1 { font-size: 60px; border-bottom: 1px solid #30363d; padding-bottom: 0.3em; color: #58a6ff; }
-  h2 { font-size: 48px; color: #58a6ff; }
-  strong { color: #58a6ff; font-weight: bold; }
-  a { color: #58a6ff; text-decoration: none; }
-  code { background-color: #161b22; color: #c9d1d9; padding: 0.2em 0.4em; border-radius: 6px; font-family: "SFMono-Regular", Consolas, monospace; }
-  pre { background-color: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 1em; }
-  pre code { background-color: transparent; padding: 0; }
-  blockquote { border-left: 4px solid #58a6ff; background: #161b22; padding: 1em; color: #8b949e; }
-  table { border-collapse: collapse; width: 100%; margin-top: 1em; }
-  th, td { border: 1px solid #30363d; padding: 0.5em; }
-  th { background-color: #161b22; color: #58a6ff; }
-  .lead { display: flex; flex-direction: column; justify-content: center; text-align: center; }
-  .lead h1 { border-bottom: none; font-size: 80px; }
-  .columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  section { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  h1, h2, h3 { color: #58a6ff; }
+  code { background: #161b22; color: #e6edf3; padding: 0.2em 0.4em; border-radius: 6px; }
+  pre { background: #161b22; border: 1px solid #30363d; }
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
   .small-text { font-size: 0.7em; color: #8b949e; }
-  .note { font-size: 0.8em; color: #8b949e; margin-top: 2em; border-top: 1px solid #30363d; padding-top: 1em; }
+mermaid: true
 ---
 
 <!-- _class: lead -->
 
-# GitHub Copilot
-## 深度实战培训
+# GitHub Copilot 深度实战培训：从基础到 Agent 智能体
+## 聚焦 VS Code 1.109/1.110 最新特性 (2026 Edition)
 
-### 2026 Edition (VS Code 1.109+)
+### 讲师：[您的名字] | GitHub Copilot 官方认证讲师
 
-**讲师**: [Your Name]
-
-<!-- speaker_note:
+<!-- speaker_note: 
 大家好，欢迎来到 GitHub Copilot 深度实战培训。
-我是今天的讲师。
-在接下来的几个小时里，我们将彻底改变你使用 Copilot 的方式。
-如果你还把它当作一个简单的“代码补全工具”，那么这堂课将会颠覆你的认知。
-我们将探索 VS Code 1.109 版本带来的革命性变化，从“记忆”到“自主代理”，再到连接万物的 MCP 协议。
+本次培训基于最新的 VS Code 1.110 (2026年2月版) 和 1.109 (1月版)。
+我们将深入探讨 Copilot 的最新进化：从单纯的代码补全工具，演变为全能的 AI 开发 Agent。
+特别涵盖 v1.110 引入的 Agent Plugins、Browser Tools 以及 v1.109 的 Multi-Agent 编排。
 -->
 
 ---
 
-# 👨‍🏫 讲师介绍
+# 议程概览 (Agenda)
 
-<div class="columns">
+1.  **基础篇 (Basics)**: VS Code 1.109/1.110 新特性与交互范式
+2.  **进阶篇 (Advanced)**: 定制化 Agent、MCP 协议与 Skills 生态
+3.  **CLI 篇 (CLI)**: 终端里的全能 Agent (Advanced Usage)
+4.  **实战演练 (Labs)**: 动手实验与 Q&A
 
-<div>
-
-### [Your Name]
-**Senior Developer / AI Advocate**
-
-- 10+ 年全栈开发经验
-- GitHub Copilot 早期使用者
-- 专注于 AI 辅助编程与工程效能
-
-</div>
-
-<div>
-
-### 核心专长
-- Cloud Native Architecture
-- TypeScript / Python / Go
-- DevSecOps
-- AI Agent Development
-
-</div>
-
-</div>
-
-<!-- speaker_note:
-简单介绍一下我自己。
-（请根据实际情况补充您的背景故事）
-我之所以热衷于 Copilot，是因为它不仅提高了我的效率，更重要的是，它改变了我解决问题的思路。
-今天，我想把这些经验毫无保留地分享给大家。
+<!-- speaker_note: 
+我们将分为三个模块。
+第一部分重点介绍 VS Code 1.109 和 1.110 的重大更新，包括 Memory 和 Session 管理。
+第二部分深入 Agent 的定制，包括 Custom Instructions 和 MCP。
+第三部分是针对高级用户的 CLI 实战。
+最后是动手环节。
 -->
 
 ---
 
-# 📅 培训议程 (Timeline)
+# 环境检查清单 (Prerequisites)
 
-```mermaid
-gantt
-    title 今日课程路线图
-    dateFormat  HH:mm
-    axisFormat  %H:%M
-    
-    section 模块一 (基础)
-    Session & Memory       :a1, 09:00, 30m
-    Chat Modes             :a2, after a1, 30m
-    
-    section 模块二 (进阶)
-    Custom Instructions    :b1, 10:15, 30m
-    Agent vs Plan Mode     :b2, after b1, 45m
-    MCP Protocol           :b3, after b2, 45m
-    
-    section 模块三 (拓展)
-    CLI & Aliases          :c1, 13:30, 30m
-    Custom Skills          :c2, after c1, 45m
-    
-    section 总结
-    Labs & Q&A             :d1, 15:00, 30m
-```
+请确保您的环境满足以下要求：
 
-<!-- speaker_note:
-这是我们今天的路线图。
-上午我们将集中攻克基础和进阶的核心概念。
-下午我们将进入更具挑战性的 CLI 和 Skills 开发。
-请大家确保电脑电量充足，VS Code 已更新到最新版本。
+*   **VS Code**: v1.110 (Feb 2026) 或更高版本
+*   **Node.js**: v22.0.0 或更高版本 (推荐 LTS)
+*   **npm**: v10.0.0 或更高版本
+*   **GitHub Copilot Extension**: 最新版本 (v1.160+)
+*   **GitHub Copilot CLI**: `@github/copilot` (npm 包)
+
+<!-- speaker_note: 
+请大家检查一下 VS Code 版本。
+点击 Help -> About，确认是 1.110 或更新。
+如果不是，请立即更新，因为很多 Agent 功能（如 Browser Tools）依赖此版本。
+CLI 也请使用 npm 安装最新版。
 -->
 
 ---
 
 <!-- _class: lead -->
 
-# 🟢 模块一：基础篇
-## 新一代交互范式
+# 模块一：基础篇 (Basics)
+## VS Code 1.109/1.110 新特性与交互范式
 
-<!-- speaker_note:
-让我们开始第一个模块。
-VS Code 1.109 是 Copilot 发展史上的一个里程碑。
-它引入了两个让 AI 变得“像人”的关键特性：记忆 (Memory) 和 会话 (Session)。
+<!-- speaker_note: 
+让我们开始第一模块。
+这不仅仅是基础，更是全新的工作流。
+VS Code 1.110 彻底改变了我们与 AI 的对话方式。
 -->
 
 ---
 
-# 🧠 痛点：为什么 AI 总是“健忘”？
+# 1. Copilot Memory (v1.109 Preview)
 
-**传统 Copilot 的局限性**:
-1.  **无状态**: 每次打开新窗口，AI 都是一张白纸。
-2.  **重复劳动**: 每次都要重复 prompt ("我是用 TypeScript 的...")。
-3.  **上下文丢失**: 昨天聊得好好的重构思路，今天全忘了。
+Copilot 现在拥有跨越会话的长期记忆。
 
-**VS Code 1.109+ 的解决方案**:
-- **Sessions**: 像微信聊天记录一样保存对话。
-- **Memory**: 像大脑一样记住你的偏好。
+*   **Context Retention**: 记住你的项目偏好、技术栈选择。
+*   **Project Indexing**: 自动构建本地向量索引。
+*   **Action**: `Settings` -> `github.copilot.memory.enable` -> `true`
 
-<!-- speaker_note:
-大家有没有这种痛苦的经历？
-为了让 Copilot 写对一个组件，你花了10分钟解释你的架构。
-第二天早上打开电脑，你得重新解释一遍。
-这不仅浪费时间，更让人沮丧。
-今天，我们要彻底解决这个问题。
+> "Copilot, remember that we use Vitest instead of Jest."
+
+<!-- speaker_note: 
+在 v1.109 中，Copilot 终于有了记忆。
+不需要每次都重复 "我用的是 React"。
+它会记住你的偏好。
+请大家现在去设置里开启 Memory 功能。
 -->
 
 ---
 
-# 📚 Session Management (会话管理)
+# Memory: How it Works? (技术揭秘)
 
-**核心概念**: 对话不再是“用完即扔”的，而是**持久化**的资产。
-
-```mermaid
-graph LR
-    A[用户] -->|发起对话| B(Session A: Debug Auth)
-    A -->|发起对话| C(Session B: Refactor UI)
-    B -->|第二天| B
-    C -->|切换工作区| C
-    style B fill:#1f6feb,stroke:#fff,stroke-width:2px
-    style C fill:#238636,stroke:#fff,stroke-width:2px
-```
-
-- **历史回溯**: 访问过去 30 天的对话。
-- **上下文恢复**: 自动加载当时引用的文件。
-
-<!-- speaker_note:
-Session 不仅仅是保存文本，它保存的是“上下文快照”。
-当你点击历史记录中的某一条时，VS Code 会尝试恢复当时你打开的文件、选中的代码。
-这意味着你可以同时进行多个任务：一个 Session 专门修 Bug，另一个 Session 专门写文档，互不干扰。
--->
-
----
-
-# 🛠️ 实操：管理你的 Sessions
-
-**现在请打开 VS Code**:
-
-1.  打开 Chat 面板 (`Ctrl+Alt+I` / `Cmd+L`)。
-2.  点击右上角的 **History (时钟图标)**。
-3.  找到昨天的任意一条记录，点击进入。
-4.  **右键点击**该 Session -> 选择 **Rename**。
-5.  重命名为 `"Workshop Demo Session"`。
-
-> **提示**: 养成给重要会话命名的习惯，就像给代码分支命名一样。
-
-<!-- speaker_note:
-(等待学员操作)
-大家看到了吗？
-所有的对话都在这里。
-试着切回你刚才重命名的 Session，AI 是否还记得刚才的上下文？
--->
-
----
-
-# 🧠 Copilot Memory (项目记忆)
-
-让 AI 记住你的“潜规则”。
-
-**配置步骤**:
-1.  打开 Settings (`Ctrl+,`).
-2.  搜索 `github.copilot.memory`.
-3.  勾选 **Enable**。
-
-**如何“植入”记忆**:
-> "在这个项目中，不管是前端还是后端，请总是使用 TypeScript，并且使用 async/await 风格。"
-
-**查看记忆**:
-- 输入 `@memory` (在支持的版本中) 或查看 Chat 面板顶部的脑图图标。
-
-<!-- speaker_note:
-Memory 是项目级别的。
-这意味着你在 Project A 告诉它用 React，在 Project B 告诉它用 Vue。
-它不会搞混。它知道在哪个山头唱哪支歌。
-现在，请大家尝试对 Copilot 说一句设定偏好的话。
--->
-
----
-
-# ⚔️ Inline vs Panel: 巅峰对决
-
-| 维度 | Inline Chat (`Ctrl+I`) | Panel Chat (`Ctrl+Alt+I`) |
-| :--- | :--- | :--- |
-| **定位** | **执行者 (Doer)** | **顾问 (Advisor)** |
-| **交互** | 原地 Diff (Accept/Discard) | 对话流 (Copy/Insert) |
-| **上下文** | 聚焦于当前光标/选区 | 聚焦于整个 Workspace |
-| **典型 Prompt** | "Fix this typo", "Add logging" | "Explain how auth works", "Plan refactoring" |
-
-<!-- speaker_note:
-很多同学问我：到底什么时候用哪个？
-我的原则是：
-如果你手在键盘上，眼在代码里，只想改几行代码 -> Inline。
-如果你需要停下来思考，需要看多个文件，或者需要解释 -> Panel。
--->
-
----
-
-# ⚡ Inline Chat: 极速重构
-
-**实操任务**:
-1.  打开 `01-basics/examples/calculator.js`。
-2.  选中 `add` 函数。
-3.  按下 `Ctrl+I`。
-4.  输入: `"Convert to arrow function"`。
-5.  **观察 Diff 视图**，按下 `Ctrl+Enter` 接受。
-
-```javascript
-// Before
-function add(a, b) {
-  return a + b;
-}
-
-// After (Inline Chat 自动生成)
-const add = (a, b) => a + b;
-```
-
-<!-- speaker_note:
-Inline Chat 的杀手锏是 Diff 视图。
-你不需要复制粘贴，不需要自己去对比哪里改了。
-它直接把旧代码和新代码叠在一起让你审阅。
-这对于 Code Review 或是快速修复非常高效。
--->
-
----
-
-# 💬 Panel Chat: 深度咨询
-
-**实操任务**:
-1.  保持 `calculator.js` 打开。
-2.  打开 Panel Chat。
-3.  输入: `"@workspace Explain the error handling logic in this file."`
-4.  Copilot 将分析全文件，并解释 `divide` 函数中的 throw 逻辑。
-
-> **关键点**: 使用 `@workspace` 能够让 Copilot 扫描整个项目索引，而不仅仅是当前文件。
-
-<!-- speaker_note:
-注意这里的 `@workspace`。
-这是一个 Scope（作用域）。
-如果你不加这个，Copilot 主要看你当前打开的文件。
-加了 `@workspace`，它就会去检索项目里的其他相关文件。
-这是做架构分析时的必备技能。
--->
-
----
-
-# 💡 效率技巧 (Efficiency Tip)
-
-### 快捷键组合拳
-
-1.  **快速采纳**: 在 Inline Chat 中，直接按 `Ctrl+Enter` 接受修改，按 `Esc` 拒绝。
-2.  **一键修复**: 遇到红波浪线报错？光标移上去，按 `Ctrl+.` -> 选择 **Fix with Copilot**。
-3.  **模式切换**: 在 Panel Chat 输入框，按 `Up/Down` 箭头可以快速回溯历史 Prompt。
-
-<!-- speaker_note:
-记住这些快捷键，每天能为你节省 10 分钟。
-特别是 `Ctrl+.`，它是这一代 IDE 最被低估的功能之一。
--->
-
----
-
-# ⚠️ 常见陷阱 (Trap)
-
-### 1. 记忆错乱
-- **现象**: Copilot 似乎记住了一些错误的偏好。
-- **解法**: 显式告诉它 "Forget what I said about X"，或者在 Memory 管理界面手动删除该条目。
-
-### 2. 上下文过载
-- **现象**: 开了太多文件，Copilot 回答变慢或不相关。
-- **解法**: 关闭不相关的 Tab，或者在 Panel Chat 中使用 `/clear` 命令清空当前会话上下文。
-
-<!-- speaker_note:
-Memory 虽好，但也可能变成负担。
-如果你发现 Copilot 总是顽固地坚持一个你已经废弃的规范。
-请务必去检查一下它的 Memory。
--->
-
----
-
-<!-- _class: lead -->
-
-# 🔵 模块二：进阶篇
-## 定制化与自主代理
-
-<!-- speaker_note:
-欢迎来到进阶篇。
-如果说基础篇是把 Copilot 当工具用。
-进阶篇就是把 Copilot 当同事用。
-我们将赋予它“人设”，并给它“手脚”。
--->
-
----
-
-# 🎭 Custom Instructions (人设定制)
-
-通过 `.github/copilot-instructions.md` 文件，为 Copilot 设定全局的**行为准则**。
-
-**核心价值**:
-- **统一规范**: 确保团队所有人的 Copilot 都遵循相同的代码风格。
-- **减少废话**: 避免 Copilot 每次都解释显而易见的知识。
-
-<!-- speaker_note:
-这是一个配置文件，放在仓库的 `.github` 目录下。
-一旦生效，它对所有与该仓库互动的 Copilot 都会起作用。
--->
-
----
-
-# 📝 模板解析 (`copilot-instructions.md`)
-
-```markdown
-# Role
-You are an expert full-stack developer specializing in TypeScript.
-
-# Code Style
-- **Naming**: Variables/Functions: camelCase; Components: PascalCase.
-- **Formatting**: Use 2 spaces indentation.
-
-# Constraints
-- **Do not** use `any` type.
-- **Do not** import from 'dist' folder.
-
-# Tone
-Be professional, concise. Avoid over-explaining standard syntax.
-```
-*(引用自 `02-advanced/templates/copilot-instructions.md.template`)*
-
-<!-- speaker_note:
-请看这个模板。
-它定义了四个维度：角色、风格、约束、语气。
-特别是 Constraints（约束），非常重要。
-比如你可以规定“绝对不要使用 eval()”或者“只允许使用特定的日期库”。
--->
-
----
-
-# 📑 Prompt Files (Prompt 工程化)
-
-将复杂的 Prompt 保存为 `.prompt.md` 文件，实现**版本控制**和**团队共享**。
-
-**使用场景**:
-- 复杂的重构任务
-- 编写特定格式的文档
-- 代码审计流程
-
-**调用方式**:
-在 Chat 中输入 `/` 即可看到仓库中定义的 Prompt Files。
-
-<!-- speaker_note:
-大家有没有觉得，写好一个 Prompt 很累？
-写好了如果不保存，下次还要重新写。
-Prompt Files 就是 Prompt 的“代码化”。
-你可以把它提交到 Git，全团队共享。
--->
-
----
-
-# 🤖 Agent Mode vs Plan Mode
-
-| 模式 | 核心逻辑 | 适用场景 |
-| :--- | :--- | :--- |
-| **Agent Mode** | **自主循环 (Loop)**: 思考 -> 执行 -> 观察 -> 再思考 | 自动化任务（运行脚本、修改多文件） |
-| **Plan Mode** | **思维链 (CoT)**: 预先规划 -> 用户确认 -> 逐步执行 | 复杂需求（新功能开发、系统设计） |
+Copilot 会在本地 `.git/copilot/index` 目录下维护一个轻量级向量库。
 
 ```mermaid
 graph TD
-    User[用户指令] --> Router{选择模式}
-    Router -->|简单直接| Agent[Agent Mode]
-    Router -->|复杂模糊| Plan[Plan Mode]
-    
-    Agent --> Exec[执行命令/编辑]
-    Exec --> Check{成功?}
-    Check -->|No| Agent
-    Check -->|Yes| Done
-    
-    Plan --> Draft[生成步骤清单]
-    Draft --> Confirm[用户批准]
-    Confirm --> Step1[执行步骤 1]
-    Step1 --> Step2[执行步骤 2]
+    User[User Input] -->|Embed| Vector[Vector Search]
+    Vector -->|Query| Index[(Local Index)]
+    Index -->|Retrieve| Context[Relevant Context]
+    Context -->|Augment| Prompt[LLM Prompt]
+    Prompt -->|Inference| Response[AI Output]
 ```
 
-<!-- speaker_note:
-这是本节课的重难点。
-Agent Mode 是“行动派”，它会自己去试错。
-Plan Mode 是“规划派”，它会先写 PPT（计划书），再干活。
+*   **Privacy**: 索引完全存储在本地，不上传云端。
+*   **Scope**: 仅当前工作区有效。
+
+<!-- speaker_note: 
+大家不用担心隐私问题。
+这个记忆是保存在你本地的 .git 目录下的。
+它通过向量搜索来增强每一次对话的上下文。
 -->
 
 ---
 
-# 🚀 Agent Mode 实战
+# 2. Advanced Session Management (v1.110)
 
-**任务**: "读取 `input.csv`，计算平均分，写入 `output.txt`。"
+VS Code 1.110 引入了更灵活的会话管理。
 
-**Agent 的心理活动**:
-1.  `ls` (我看下文件在不在？不在。)
-2.  `touch data_processor.py` (那我建个脚本。)
-3.  `write` (写入 Python 代码...)
-4.  `python data_processor.py` (运行一下...)
-5.  `cat output.txt` (检查结果...)
-6.  "完成任务，结果是 85.5。"
+*   **Unified Interface**: 统一管理 Copilot, Claude, Local Agents。
+*   **Fork Session**: 从某个节点分叉对话，探索不同方案。
+*   **Manual Compact**: `/compact` 命令手动压缩上下文，释放 token。
 
-> **实操**: 进入 `02-advanced/agent-mode-demo` 体验此流程。
+```mermaid
+stateDiagram-v2
+    [*] --> Active: Start Chat
+    Active --> Forked: Fork Session
+    Forked --> ExperimentA: Try Solution A
+    Forked --> ExperimentB: Try Solution B
+    Active --> Compacted: /compact
+    Compacted --> Active: Continue
+```
 
-<!-- speaker_note:
-这不仅仅是代码生成。
-这是代码生成 + 终端执行 + 错误修正。
-如果脚本报错了，Agent 会自己读错误日志，自己修代码，再运行。
-完全不需要你插手。
+<!-- speaker_note: 
+有时候聊着聊着，发现思路错了，想回到三句前？
+v1.110 允许你 "Fork" 一个会话。
+就像 Git 分支一样，你可以同时探索两个方案。
+如果上下文太长，用 `/compact` 把它压缩一下。
 -->
 
 ---
 
-# 🗺️ Plan Mode 实战
+# Session Forking Demo (演示)
 
-**任务**: "设计一个电商订单系统。"
+*   **Scenario**: 重构一个复杂的 API 接口。
+*   **Branch A**: 尝试使用 GraphQL 方案。
+*   **Branch B**: 尝试使用 RESTful 方案。
+*   **Action**: 在对话气泡右上角点击 "Fork" 图标。
 
-**Copilot 生成的计划**:
-- [ ] **Step 1**: Create `Order` and `Product` interfaces.
-- [ ] **Step 2**: Implement `OrderService` class.
-- [ ] **Step 3**: Add validation logic for stock.
-- [ ] **Step 4**: Write unit tests.
-
-> **实操**: 进入 `02-advanced/plan-mode-demo`，输入 `@workspace /plan Implement requirements.md`。
-
-<!-- speaker_note:
-Plan Mode 会生成一个动态的 Checklist。
-你可以点击每一步旁边的“执行”按钮。
-也可以修改计划，比如删除某一步，或者打乱顺序。
-这给了你对 AI 极强的控制感。
+<!-- speaker_note: 
+这个功能在做技术选型的时候非常有用。
+你可以在一个分支里试错，而不污染主线对话。
 -->
 
 ---
 
-# 🔌 MCP Protocol: 连接万物
+# 3. Inline Chat vs Panel Chat (v1.110 Updates)
 
-**Model Context Protocol (MCP)** 是 Copilot 的感官延伸。
+### Inline Chat (`Cmd+I`)
+*   **Update**: 支持 Right-click snippet integration。
+*   **Use Case**: 快速修复、局部重构。
+
+### Panel Chat (Sidebar)
+*   **Update**: 支持 Drag & Drop 图片 (Vision)、Mermaid 渲染。
+*   **Use Case**: 架构设计、复杂问答。
+
+```mermaid
+graph TD
+    A[User Goal] --> B{Need visible context?}
+    B -->|Yes| C[Panel Chat]
+    B -->|No| D{Quick Fix?}
+    D -->|Yes| E[Inline Chat]
+    D -->|No| C
+    C --> F{Visual Input?}
+    F -->|Yes| G[Drag Image to Panel]
+    F -->|No| H[Text Query]
+```
+
+<!-- speaker_note: 
+v1.110 增强了 Panel 的视觉能力。
+你可以直接把架构图拖进去问 Copilot。
+Inline Chat 现在集成到了右键菜单，用起来更顺手。
+大家看这个决策树，选择最适合的模式。
+-->
+
+---
+
+# Visual Capabilities in Panel (视觉能力)
+
+v1.110 支持直接拖拽截图或设计稿到 Chat Panel。
+
+*   **Design to Code**: 拖入 Figma 截图 -> 生成 HTML/CSS。
+*   **Error Analysis**: 拖入报错截图 -> 分析原因。
+*   **Architecture**: 拖入白板草图 -> 生成 Mermaid 代码。
+
+<!-- speaker_note: 
+以前我们要用 OCR 或者手打。
+现在直接拖进去，Copilot 就能看懂你的设计图。
+这对于前端开发来说是神器。
+-->
+
+---
+
+# 4. Related Files Improvement (v1.110)
+
+Copilot 现在能更聪明地猜出你需要的相关文件。
+
+*   **Algorithm**: 基于 "Edit Distance" 和 "Import Graph" 的混合算法。
+*   **UI**: 在 Chat 输入框上方显示 "Used references"。
+*   **Manual**: 你也可以通过 `@file` 手动添加。
+
+<!-- speaker_note: 
+v1.110 改进了上下文检索算法。
+它不仅看文件名，还看引用关系。
+你会发现它自动引用的文件越来越准了。
+-->
+
+---
+
+# 实战案例 1: Agentic Browser Tools (v1.110 Exp)
+
+Copilot Agent 现在可以操控浏览器进行调试。
+
+1.  **Scenario**: 前端页面显示异常。
+2.  **Prompt**: `@browser Check the console logs for the active tab.`
+3.  **Action**: Agent 自动连接浏览器，读取 Log，分析错误。
+
+> **Requirement**: 需安装 `GitHub Copilot Browser` 扩展。
+
+<!-- speaker_note: 
+这是 v1.110 最酷的功能之一。
+Agent 可以直接看浏览器了。
+不需要你复制粘贴 console log，它自己去抓。
+请大家安装 Browser 扩展体验一下。
+-->
+
+---
+
+# 实战案例 2: Multi-Agent Orchestration (v1.109)
+
+让多个子 Agent 并行工作。
+
+1.  **Scenario**: 需要同时生成前端组件和后端 API。
+2.  **Prompt**: `Create a User profile page and the corresponding Express API endpoint.`
+3.  **Execution**:
+    *   Sub-agent A: Writes `UserProfile.tsx`
+    *   Sub-agent B: Writes `userController.js`
+    *   Orchestrator: Merges and verifies.
+
+<!-- speaker_note: 
+v1.109 引入了多 Agent 编排。
+以前是串行，现在是并行。
+Copilot 会把任务拆分，分发给不同的子模型去跑。
+效率提升非常明显。
+-->
+
+---
+
+# 实战案例 3: Mermaid Diagrams in Chat (v1.109)
+
+让 Copilot 画图解释代码。
+
+1.  **Scenario**: 理解复杂的鉴权流程。
+2.  **Prompt**: `Explain the OAuth2 flow in this project with a sequence diagram.`
+3.  **Result**: 直接在 Chat 窗口渲染可交互的 Mermaid 图表。
+
+<!-- speaker_note: 
+一图胜千言。
+v1.109 开始，Copilot 输出的 Mermaid 代码会自动渲染成图。
+你可以直接保存图片，放到文档里。
+-->
+
+---
+
+<!-- _class: lead -->
+
+# 模块二：进阶篇 (Advanced)
+## 定制化 Agent、MCP 协议与 Skills 生态
+
+<!-- speaker_note: 
+接下来进入进阶篇。
+我们将学习如何打造团队专属的 Copilot。
+利用 v1.110 的 Agent Plugins 和 MCP 协议。
+-->
+
+---
+
+# 1. Custom Instructions (v1.110 Global Support)
+
+通过 `.github/copilot-instructions.md` 定义全局规范。
+
+*   **Scope**: Repository Level.
+*   **Content**: Role, Tech Stack, Code Style.
+*   **Update**: v1.110 增强了对 Instructions 的遵循权重。
 
 ```mermaid
 graph LR
-    VSCode[VS Code] <-->|MCP Client| MCPServer[MCP Server]
-    MCPServer <-->|SQL| SQLite[(SQLite DB)]
-    MCPServer <-->|API| GitHub[GitHub API]
-    MCPServer <-->|I/O| Files[Filesystem]
+    Repo[.github/copilot-instructions.md] -->|Load| Context[Context Window]
+    User[User Query] -->|Combine| Context
+    Context -->|Inference| Model[LLM]
+    Model -->|Response| Code[Tailored Code]
 ```
 
-**为什么需要它？**
-- Copilot 默认只能看编辑器里的代码。
-- MCP 让它能看数据库、看私有文档、看内部系统。
-
-<!-- speaker_note:
-这是 OpenAI 和 Anthropic 都在推的标准。
-通过 MCP，我们可以把任何数据源变成 Copilot 的上下文。
+<!-- speaker_note: 
+Custom Instructions 是必修课。
+v1.110 里，它的权重更高了。
+Copilot 会优先遵循这里面的规则，而不是通用的训练数据。
 -->
 
 ---
 
-# ⚙️ MCP 配置实战 (`sqlite-mcp.json`)
+# Instructions 最佳实践 (Best Practices)
+
+*   **Role Definition**: 定义 Copilot 的角色（如 Senior Java Developer）。
+*   **Negative Constraints**: 明确“不要做什么”（如 Don't use `var`）。
+*   **Style Examples**: 提供少量“好代码”的示例。
+
+```markdown
+# Role
+Act as a Senior DevOps Engineer.
+
+# Style Guidelines
+- Prefer modular Terraform configurations.
+- Always include `description` for variables.
+```
+
+<!-- speaker_note: 
+不要写作文，要写指令。
+用 Bullet points。
+多用 Negative Constraints，告诉它不要做什么往往比告诉它要做什么更有效。
+-->
+
+---
+
+# Variable Injection in Instructions (进阶技巧)
+
+你可以在 Instructions 中使用变量插值。
+
+*   `{{ active_file }}`: 当前打开的文件名。
+*   `{{ selected_code }}`: 当前选中的代码。
+*   `{{ language }}`: 当前语言。
+
+**Example**:
+`When reviewing {{ language }} code, always check for PEP-8 compliance.`
+
+<!-- speaker_note: 
+这让你的 Instructions 更动态。
+针对不同语言，应用不同的规则。
+-->
+
+---
+
+# 2. Agent Plugins (v1.110 Preview)
+
+将 Skills 打包成 VS Code 插件分发。
+
+*   **Concept**: 一个插件包含一组 Prompts, Skills, Agents。
+*   **Distribution**: 通过 VS Code Marketplace 或 VSIX 分发。
+*   **Structure**:
+    *   `package.json`: 定义 contributions
+    *   `skill.json`: 定义能力
+    *   `extension.ts`: 实现逻辑
+
+<!-- speaker_note: 
+v1.110 带来的新东西：Agent Plugins。
+你可以把你们团队的“最佳实践”打包成一个插件。
+新人入职，装个插件，Copilot 马上学会你们的所有黑话和流程。
+-->
+
+---
+
+# 3. Agent Mode vs Plan Mode
+
+### Agent Mode (Autonomous)
+*   **Behavior**: 自动规划、自动执行工具、自动修正错误。
+*   **Update**: v1.109 增强了错误恢复能力。
+
+### Plan Mode (Human-in-the-Loop)
+*   **Behavior**: 仅生成步骤，每一步需人工确认。
+*   **Update**: v1.110 支持 `Plan Memory`，跨会话记住计划。
+
+<!-- speaker_note: 
+Agent 模式适合全自动任务，比如部署、清理日志。
+Plan 模式适合高风险任务，比如动数据库。
+v1.110 让 Plan 即使关掉窗口也能记住进度。
+-->
+
+---
+
+# Agent vs Plan Workflow Comparison
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Agent as Agent Mode
+    participant Plan as Plan Mode
+    
+    User->>Agent: "Deploy to Prod"
+    Agent->>Agent: Check -> Build -> Deploy -> Verify
+    Agent-->>User: Done!
+
+    User->>Plan: "Refactor Database"
+    Plan-->>User: Plan: 1. Backup, 2. Migrate, 3. Verify
+    User->>Plan: Approve Step 1
+    Plan-->>User: Step 1 Done. Approve Step 2?
+```
+
+<!-- speaker_note: 
+这张图清晰展示了两种模式的区别。
+左边是“全托”，右边是“半托”。
+-->
+
+---
+
+# 4. MCP Protocol (Model Context Protocol)
+
+MCP 是连接 Copilot 与外部数据的标准。
+
+*   **Architecture**:
+    *   **Host**: VS Code / CLI
+    *   **Client**: Copilot Chat
+    *   **Server**: SQLite, Postgres, Slack, Linear...
+
+```mermaid
+graph LR
+    VSCode[VS Code Host] -- JSON-RPC --> MCPServer[MCP Server]
+    MCPServer -- Query --> Database[(Database)]
+    MCPServer -- API --> SaaS[SaaS Service]
+    MCPServer -- FileOps --> FS[Local Filesystem]
+```
+
+<!-- speaker_note: 
+MCP 是未来的核心。
+它让 Copilot 能“看见”数据库里的数据，能“看见”Jira 里的票。
+-->
+
+---
+
+# MCP Server 配置 (v1.110 Simplified)
+
+`mcp-configs/sqlite-mcp.json`
 
 ```json
 {
@@ -512,259 +457,540 @@ graph LR
       "args": [
         "mcp-server-sqlite",
         "--db-path",
-        "./test.db"
+        "./prod.db"
       ]
     }
   }
 }
 ```
-*(引用自 `02-advanced/mcp-configs/sqlite-mcp.json`)*
 
-**配置后**:
-> User: "查询 users 表中最近注册的用户。"
-> Copilot: (自动执行 SQL) `SELECT * FROM users ORDER BY created_at DESC LIMIT 5;`
-
-<!-- speaker_note:
-只需要这样一个简单的 JSON 配置。
-你就不需要再安装数据库客户端了。
-Copilot 直接变身 SQL 专家。
+<!-- speaker_note: 
+配置非常简单。
+只要指定 Server 的启动命令（比如 uvx 或 docker）。
+VS Code 会自动管理连接。
 -->
 
 ---
 
-# 🏆 学员挑战 (5 min)
+# MCP 实战: Filesystem Server
 
-**挑战任务**:
-1.  在 `02-advanced/mcp-configs/` 目录下创建一个名为 `my-mcp.json` 的文件。
-2.  参考 `filesystem-mcp.json`，配置一个允许访问你桌面 (`Desktop`) 的 FileSystem Server。
-3.  重启 VS Code。
-4.  问 Copilot: "Read the file 'todo.txt' on my desktop." (请先在桌面建一个 todo.txt)。
+让 Agent 访问工作区之外的文件。
 
-<!-- speaker_note:
-(倒计时 5 分钟)
-这个挑战测试大家对 MCP 路径配置的理解。
-注意：路径必须是绝对路径。
+*   **Server**: `mcp-server-filesystem`
+*   **Config**:
+    ```json
+    "args": ["/var/log/nginx", "/etc/hosts"]
+    ```
+*   **Use Case**: 分析系统日志，检查 Host 配置。
+
+<!-- speaker_note: 
+默认情况下，Copilot 只能看当前 workspace。
+通过 Filesystem MCP，你可以授权它看 /var/log 或者其他目录。
+这对于运维诊断非常有帮助。
 -->
 
 ---
 
-# ⚠️ 进阶陷阱 (Trap)
+# MCP 实战: Postgres Server
 
-### 1. Agent "暴走"
-- **现象**: Agent Mode 不停地创建错误文件或陷入死循环。
-- **解法**: 随时准备点击 **Stop Generating** 按钮。在 Prompt 中明确约束 "Do not create new files unless necessary"。
+连接数据库进行查询。
 
-### 2. MCP 连接失败
-- **现象**: Chat 显示 "MCP server error"。
-- **解法**: 检查 `uvx` 或 `npx` 是否在 PATH 环境变量中。检查 JSON 配置中的路径是否使用了绝对路径 (Windows 下要注意反斜杠转义)。
+*   **Server**: `mcp-server-postgres`
+*   **Capability**: Read Schema, Execute Select.
+*   **Security**: Read-only user recommended.
+*   **Prompt**: "Query the `users` table for active admins."
 
-<!-- speaker_note:
-Agent 能力越强，风险越大。
-一定要在沙箱环境或有 Git 版本控制的环境下使用 Agent。
+<!-- speaker_note: 
+你可以直接问 Copilot "查一下最近注册的10个用户"。
+它会自动生成 SQL，执行查询，然后把结果展示给你。
+不需要切换到 DBeaver 或者 pgAdmin。
 -->
 
 ---
 
-<!-- _class: lead -->
+# 5. Skills Development (v1.109 GA)
 
-# 🟣 模块三：拓展篇
-## CLI 效率与 Skills 生态
+创建自定义 Skill 供 Agent 调用。
 
-<!-- speaker_note:
-最后这个模块是给极客准备的。
-我们将离开舒适的图形界面，进入黑底白字的终端世界。
-并将亲手开发一个 Copilot 插件。
--->
+*   **Manifest**: 描述 Skill 的输入输出。
+*   **Implementation**: Python / Node.js 脚本。
 
----
-
-# 💻 Copilot CLI: 终端革命
-
-**核心功能**:
-1.  **Suggest**: 将自然语言转换为 Shell 命令。
-2.  **Explain**: 解释复杂的 Shell 命令。
-
-**常用场景**:
-- Git 复杂操作 ("Undo last commit keeping changes")
-- Docker 清理 ("Stop all containers and remove images")
-- 文本处理 ("Find all js files and count lines")
-
-<!-- speaker_note:
-CLI 工具是独立于 VS Code 的。
-你需要单独安装 `github-copilot-cli` (现在通常集成在 `gh` cli 中)。
--->
-
----
-
-# ⚡ Aliases: 效率倍增器
-
-不要每次都打 `gh copilot suggest`。配置别名 (`??`)！
-
-```bash
-# Add to .bashrc or .zshrc
-alias ??='gh copilot suggest -t shell'
-alias wtf='gh copilot explain'
-alias git?='gh copilot suggest -t git'
-```
-*(引用自 `03-cli-skills/aliases/.copilot-aliases`)*
-
-**使用效果**:
-```bash
-$ ?? list files larger than 100MB
-# Suggestion: find . -type f -size +100M
-```
-
-<!-- speaker_note:
-`??` 这个别名非常传神。
-当你遇到不会的命令时，打两个问号，Copilot 就来帮你了。
--->
-
----
-
-# 🧩 Custom Skills: 构建专属能力
-
-**定义**: Skills 是 Copilot 的轻量级插件。
-
-**结构**:
 ```mermaid
 graph LR
-    Manifest[manifest.json] -->|定义入口| Script[index.js]
-    Copilot -->|StdIn (JSON)| Script
-    Script -->|StdOut (JSON)| Copilot
+    User[User Prompt] -->|Intent Match| Orchestrator
+    Orchestrator -->|Call| Skill[Custom Skill]
+    Skill -->|Execute| Script[Python/Node Script]
+    Script -->|Result| Orchestrator
+    Orchestrator -->|Response| User
 ```
 
-**应用场景**:
-- 内部 API 调用 (e.g., "Check ticket status Jira-123")
-- 特定代码生成 (e.g., "Generate Unit Test for Login")
-- 运维脚本触发 (e.g., "Deploy to staging")
-
-<!-- speaker_note:
-Skills 的原理非常简单，就是标准输入输出。
-你可以用 Python, Node.js, Go 甚至 Shell 写 Skill。
-只要能读 JSON，吐 JSON 即可。
+<!-- speaker_note: 
+如果 MCP 是连接数据，Skill 就是执行动作。
+你可以写一个 Python 脚本来重启服务器。
+把它封装成 Skill，Copilot 就能调用了。
 -->
 
 ---
 
-# 🛠️ Skill 开发流程详解
+# Skill Manifest Example (Manifest 示例)
 
-**Manifest (`manifest.json`)**:
 ```json
 {
-  "name": "unit-test-generator",
-  "version": "1.0.0",
-  "commands": [
-    {
-      "name": "generate",
-      "executable": "node",
-      "arguments": ["index.js"]
+  "name": "generate-uuid",
+  "description": "Generates a random UUID",
+  "entry": "scripts/uuid_gen.py",
+  "inputs": {
+    "version": {
+      "type": "integer",
+      "description": "UUID version (4 or 5)"
     }
-  ]
+  }
 }
 ```
-*(引用自 `03-cli-skills/sample-custom-skill/manifest.json`)*
 
-**关键点**:
-- `name`: 必须唯一，作为调用前缀 (`@unit-test-generator`).
-- `executable`: 执行环境。
-
-<!-- speaker_note:
-这是 Skill 的身份证。
-Copilot 读取这个文件来知道如何调用你的程序。
+<!-- speaker_note: 
+Manifest 非常简单。
+定义名字、描述、入口文件、参数。
+Copilot 会根据描述自动决定何时调用这个 Skill。
 -->
 
 ---
 
-# ⚠️ 拓展陷阱 (Trap)
+# 6. Troubleshooting (故障排除)
 
-### 1. CLI 认证失效
-- **现象**: `gh copilot` 提示未登录。
-- **解法**: 运行 `gh auth login` 并确保选择了 `GitHub.com` 且授权了 Copilot 权限。
+### Q: Browser Tools 无法连接？
+*   **Check**: 确保 Chrome/Edge 已安装，且未被管理员策略禁用调试端口。
+*   **Fix**: 尝试以 `--remote-debugging-port=9222` 启动浏览器。
 
-### 2. Skill 响应超时
-- **现象**: Copilot 等待很久后报错。
-- **解法**: Skill 必须在几秒内返回 JSON。如果是耗时操作，应立即返回 "Started" 状态，并通过其他方式通知结果。
+### Q: Agent Plugin 不生效？
+*   **Check**: 检查 `package.json` 中的 `copilot` 字段配置。
+*   **Fix**: 确保插件已启用且信任工作区。
 
-<!-- speaker_note:
-Skill 开发中最常见的问题就是 JSON 格式错误。
-哪怕多输出了一行 `console.log` 的调试信息，都会导致 JSON 解析失败。
-一定要确保 stdout 只输出纯净的 JSON。
+<!-- speaker_note: 
+遇到问题先别慌。
+Browser Tools 最常见的问题是端口被占用或权限不足。
+Agent Plugin 记得要 Trust Workspace。
+-->
+
+---
+
+# Troubleshooting MCP
+
+### Q: MCP Server 连接失败？
+*   **Check**: 检查 JSON 配置文件语法。
+*   **Check**: 确保 `uvx` 或 `docker` 命令在 PATH 中。
+*   **Logs**: 查看 Output 面板中的 "GitHub Copilot MCP" 频道。
+
+<!-- speaker_note: 
+MCP 出错通常是路径问题或者依赖没装好。
+多看 Output 面板的日志。
 -->
 
 ---
 
 <!-- _class: lead -->
 
-# 📝 总结与实验
-## Summary & Labs
+# 模块三：CLI 篇 (CLI)
+## 终端里的全能 Agent (Advanced Usage)
+
+<!-- speaker_note: 
+现在我们进入真正的极客领域：CLI。
+这不是简单的命令补全，它是驻留在你终端里的高级 Agent。
+基于 npm 包 `@github/copilot`。
+-->
 
 ---
 
-# 🗺️ 知识地图 (Knowledge Map)
+# 1. Copilot CLI Agent (npm version)
 
-```mermaid
-mindmap
-  root((Copilot 2026))
-    Context
-      Session History
-      Project Memory
-    Interaction
-      Inline Chat (Diff)
-      Panel Chat (Advisor)
-    Automation
-      Agent Mode (Execute)
-      Plan Mode (Think)
-    Extensions
-      MCP (Data)
-      Skills (Logic)
-      CLI (Shell)
+*   **Identity**: 全能型 Terminal Agent。
+*   **Install**: `npm install -g @github/copilot`
+*   **Update**: 相比旧版 `gh extension`，新版支持完整的 Agent 能力和 MCP。
+
+```bash
+# 启动交互式 Agent
+copilot
+
+# 登录
+copilot auth login
 ```
 
-<!-- speaker_note:
-这就是我们今天学到的所有内容。
-从最基础的 Context 管理，到最高级的 Agent 自动化。
-Copilot 的能力版图正在飞速扩张。
+<!-- speaker_note: 
+请大家注意，我们用的是 npm 包 `@github/copilot`。
+它是一个独立的程序，不再依附于 gh cli。
+能力更强，响应更快。
 -->
 
 ---
 
-# 🧪 动手实验 (Lab Tasks)
+# CLI Workflow (工作流)
 
-请在课后完成以下三个实验：
+```mermaid
+sequenceDiagram
+    participant User
+    participant CLI as CLI Agent
+    participant Shell
+    
+    User->>CLI: "Find large files and delete them"
+    CLI->>CLI: Plan: `find . -size +100M`
+    CLI-->>User: Confirm: Run find command?
+    User->>CLI: Allow
+    CLI->>Shell: Execute `find ...`
+    Shell-->>CLI: List of files
+    CLI->>CLI: Plan: `rm file1 file2`
+    CLI-->>User: Confirm: Run rm command?
+    User->>CLI: Allow
+    CLI->>Shell: Execute `rm ...`
+```
 
-1.  **Lab 1: Memory & Refactor**
-    - 配置一条关于代码注释风格的 Memory。
-    - 使用 Inline Chat 重构 `01-basics/examples/calculator.js`，验证 Memory 是否生效。
+<!-- speaker_note: 
+CLI 的核心哲学是 "Human-in-the-loop"。
+它思考 -> 计划 -> 请示 -> 执行。
+每一步危险操作都会让你确认。
+-->
 
-2.  **Lab 2: MCP Connection**
-    - 运行 `02-advanced/mcp-configs/sqlite-mcp.json`。
-    - 在 Chat 中查询数据库表结构。
+---
 
-3.  **Lab 3: Build a Skill**
-    - 运行 `03-cli-skills/sample-custom-skill`。
-    - 修改 `index.js`，使其能生成 Python 的 `unittest` 代码。
+# Core Scenario 1: Project Understanding
 
-<!-- speaker_note:
-光听不练假把式。
-这三个实验分别对应了今天的三个模块。
-完成它们，你才能真正掌握 GitHub Copilot 的精髓。
+快速理解陌生项目结构。
+
+**User**: "Explain the layout of this project."
+
+**Agent Action**:
+1.  Executes `ls -F` or `tree -L 2`.
+2.  Reads `package.json` or `README.md`.
+3.  Synthesizes a summary of the architecture.
+
+> **Tip**: 使用 `/compact` 清理上下文后再次询问。
+
+<!-- speaker_note: 
+接手新项目，第一件事就是问它 "Layout"。
+它会帮你跑 ls，读 readme，然后告诉你这是个什么项目。
+-->
+
+---
+
+# Core Scenario 2: Environment Check
+
+自动化环境诊断。
+
+**User**: "Make sure my environment is ready to build."
+
+**Agent Action**:
+1.  Parses `package.json` for `engines`.
+2.  Runs `node -v`, `npm -v`, `java -version`.
+3.  Compares versions and suggests installs (e.g., via `nvm`).
+
+<!-- speaker_note: 
+环境配置是新人的噩梦。
+CLI Agent 可以自动读取配置文件，检查你的本地环境。
+甚至帮你生成安装命令。
+-->
+
+---
+
+# Core Scenario 3: Issue Triage (via MCP)
+
+在终端筛选 GitHub Issues。
+
+**User**: "Find good first issues and rank them."
+
+**Agent Action**:
+1.  Connects to GitHub MCP Server.
+2.  Fetches issues with label `good first issue`.
+3.  Analyzes complexity based on description.
+4.  Outputs a ranked list with IDs.
+
+<!-- speaker_note: 
+配合 MCP，CLI 可以直接读 GitHub。
+不需要切浏览器，直接在黑框框里找任务。
+-->
+
+---
+
+# Core Scenario 4: Implementation & Diff
+
+代码实现与审查。
+
+**User**: "Start implementing issue #1234. Show me the diff before applying."
+
+**Agent Action**:
+1.  Reads Issue #1234 content.
+2.  Modifies files (e.g., `src/app.ts`).
+3.  Generates a colored diff output.
+4.  Waits for user confirmation to write to disk.
+
+<!-- speaker_note: 
+这是 CLI 最强大的地方。
+它能写代码，而且会先给你看 diff。
+你觉得没问题，回车，它才写入文件。
+安全又高效。
+-->
+
+---
+
+# Core Scenario 5: Git Workflow Automation
+
+全自动提交工作流。
+
+**User**: "Stage changes, write a commit referencing #1234, and open a draft PR."
+
+**Agent Action**:
+1.  `git add .`
+2.  `git commit -m "feat: implement user login (fixes #1234)"`
+3.  `gh pr create --draft --title "..." --body "..."`
+
+<!-- speaker_note: 
+写完代码，提交、推送、发 PR，一气呵成。
+Copilot 会自动根据你的代码变动生成 commit message。
+-->
+
+---
+
+# Core Scenario 6: System Ops
+
+系统运维与进程管理。
+
+**User**: "What process is using port 8080? Kill it."
+
+**Agent Action**:
+1.  Detects OS (Windows/Linux/Mac).
+2.  Runs `lsof -i :8080` or `netstat`.
+3.  Parses PID.
+4.  Asks confirmation to `kill -9 <PID>`.
+
+<!-- speaker_note: 
+忘掉那些复杂的运维命令吧。
+直接用自然语言问它。
+它会处理好 OS 差异，找到正确的命令。
+-->
+
+---
+
+# Security: Ask Before Run
+
+安全是 CLI Agent 的底线。
+
+*   **Mechanism**: 拦截所有副作用指令 (File Write, Shell Exec, Net Request)。
+*   **Choices**:
+    *   **Allow once**: 仅允许本次。
+    *   **Allow always**: 信任此命令 (慎用)。
+    *   **Deny**: 拒绝执行。
+
+> **v1.109 Update**: Terminal Sandboxing (Experimental) 为命令执行提供了隔离环境。
+
+<!-- speaker_note: 
+千万不要嫌确认麻烦。
+这是保护你系统的最后一道防线。
+v1.109 还引入了沙箱机制，进一步降低风险。
+-->
+
+---
+
+# CLI Aliases (别名配置)
+
+为常用指令创建别名。
+
+*   **File**: `~/.copilot-aliases` (or similar config)
+*   **Content**:
+    ```yaml
+    explain-git: "Explain the last 5 commits"
+    fix-lint: "Run lint and fix all auto-fixable errors"
+    ```
+*   **Usage**: `copilot run fix-lint`
+
+<!-- speaker_note: 
+就像 Git alias 一样。
+你可以把你最常用的 Prompt 保存下来。
+一键调用，效率翻倍。
+-->
+
+---
+
+# CLI Configuration (配置管理)
+
+通过 `copilot config` 管理行为。
+
+*   **Models**: 切换后端模型 (e.g., `copilot config set model gpt-4o`).
+*   **Context**: 设置最大上下文长度。
+*   **Output**: 设置输出语言 (English/Chinese)。
+
+<!-- speaker_note: 
+CLI 也支持切换模型。
+如果你需要更快的速度，可以切到轻量级模型。
+需要更强的逻辑，切到 GPT-4o 或 Claude 3.5 Sonnet (如果支持)。
+-->
+
+---
+
+# CLI MCP Extensions
+
+通过 `/mcp` 扩展 CLI 能力。
+
+*   **Command**: `/mcp install <server-name>` (Conceptual)
+*   **Config**: `~/.config/github-copilot/mcp.json`
+*   **Example**: Connect to PostgreSQL database for query debugging in terminal.
+
+```mermaid
+graph LR
+    CLI[Copilot CLI] <--> MCP[MCP Client]
+    MCP <--> ServerA[Postgres Server]
+    MCP <--> ServerB[GitHub Server]
+    ServerA <--> DB[(DB Data)]
+    ServerB <--> API[GitHub API]
+```
+
+<!-- speaker_note: 
+CLI 也可以挂载 MCP Server。
+这样你在终端里不仅能操作文件，还能操作数据库、云资源。
+-->
+
+---
+
+# 总结与实战演练 (Summary & Labs)
+
+<!-- speaker_note: 
+最后，我们来总结一下今天的内容。
+-->
+
+---
+
+# 1. 知识地图 (Mind Map)
+
+*   **Basics (v1.110)**:
+    *   Session Forking & Compact
+    *   Browser Tools (Agentic)
+    *   Memory (Context Retention)
+*   **Advanced**:
+    *   Agent Plugins (Packaging)
+    *   MCP & Skills (Connectivity)
+    *   Plan Mode (Reasoning)
+*   **CLI (npm)**:
+    *   Terminal Agent
+    *   System Ops & Git Workflow
+    *   Ask Before Run Security
+
+<!-- speaker_note: 
+这张图涵盖了今天的核心知识点。
+特别是 v1.110 的新特性，大家要重点掌握。
+-->
+
+---
+
+# 2. 实验任务卡 (Labs) - Lab 1
+
+**Module 1: Basics & Memory**
+
+1.  **Setup**: Open VS Code Settings, enable `github.copilot.memory.enable`.
+2.  **Task**:
+    *   Tell Copilot: "My preferred test framework is Vitest."
+    *   Close session, start new one.
+    *   Ask: "Write a unit test for this function." (Verify it uses Vitest).
+3.  **Fork**: Click the "Fork" icon on the last response, try asking for "Jest" instead in the new branch.
+
+<!-- speaker_note: 
+Lab 1 重点体验记忆和分叉。
+验证它是否真的记住了你的偏好。
+-->
+
+---
+
+# 2. 实验任务卡 (Labs) - Lab 2
+
+**Module 2: Agent & Instructions**
+
+1.  **Setup**: Create `.github/copilot-instructions.md` in your repo root.
+    *   Content: "Always add comments in Chinese."
+2.  **Task**:
+    *   Open `mcp-configs/sqlite-mcp.json`.
+    *   Ask Copilot to explain the config.
+    *   Verify the explanation contains Chinese comments.
+3.  **Bonus**: Use Plan Mode to refactor the JSON structure.
+
+<!-- speaker_note: 
+Lab 2 体验定制化。
+看看 Instructions 是否真的生效了。
+尝试一下 Plan Mode 的思维链。
+-->
+
+---
+
+# 2. 实验任务卡 (Labs) - Lab 3
+
+**Module 3: CLI Agent**
+
+1.  **Setup**: `npm install -g @github/copilot` and `copilot auth login`.
+2.  **Task**:
+    *   Run `copilot` to enter interactive mode.
+    *   Prompt: "Check if port 3000 is open."
+    *   Prompt: "Create a new file named 'hello.js' that prints 'Hello World'."
+    *   Confirm the file creation.
+    *   Prompt: "Run this file."
+
+<!-- speaker_note: 
+Lab 3 体验终端里的 Agent。
+注意观察它在执行文件操作时的确认提示。
+-->
+
+---
+
+# 常见陷阱 (Pitfalls & Tips)
+
+1.  **Memory 不生效？**
+    *   检查是否只在 Workspace 级别开启，User 级别未开启。
+    *   记忆需要一定时间索引，不要心急。
+2.  **CLI 乱码？**
+    *   Windows 用户请使用 Windows Terminal 或 PowerShell 7+。
+    *   检查系统编码设置 (`chcp 65001`).
+3.  **MCP 连不上？**
+    *   Docker 服务没起？
+    *   `uvx` 命令找不到？(请安装 `uv` 包管理器)。
+
+<!-- speaker_note: 
+这几点是大家在实验中容易遇到的坑。
+特别是 CLI 在 Windows 下的乱码问题，记得切到 UTF-8。
 -->
 
 ---
 
 <!-- _class: lead -->
 
-# Q & A
+# Q&A (答疑环节)
 
-### 感谢聆听
+## 感谢参与！
 
-**Repository**: https://github.com/gaoshanj/github-copilot-workshop-2026
+### 资源链接
+*   [VS Code Updates (v1.110)](https://code.visualstudio.com/updates/v1_110)
+*   [GitHub Copilot CLI Docs](https://docs.github.com/copilot/github-copilot-in-the-cli)
+*   [本课程 Repo](https://github.com/gaoshanj/github-copilot-workshop-2026)
 
-<div class="small-text">
-Generate PDF: marp slides.md -o slides.pdf
-</div>
-
-<!-- speaker_note:
-感谢大家的时间。
-现在把时间交给你们，有什么问题，欢迎提问。
+<!-- speaker_note: 
+再次感谢大家。
+希望今天的培训能帮助大家升级工作流。
+有问题请随时提问。
 -->
+
+---
+
+# 附录: 环境准备指南
+
+如果您尚未准备好环境，请执行以下命令：
+
+1.  **安装 Node.js (v22+)**:
+    访问 [nodejs.org](https://nodejs.org/) 下载最新版。
+
+2.  **安装 Copilot CLI**:
+    ```bash
+    npm install -g @github/copilot
+    ```
+
+3.  **安装 Marp (预览课件)**:
+    在 VS Code 插件市场搜索 "Marp for VS Code" 并安装。
+
+4.  **Clone 仓库**:
+    ```bash
+    git clone https://github.com/gaoshanj/github-copilot-workshop-2026.git
+    cd github-copilot-workshop-2026
+    npm install
+    ```
